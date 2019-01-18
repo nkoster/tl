@@ -35,6 +35,7 @@ nav {
 	width:0px;
 	height:16px;
 	background:darkgray;
+	transition: width 0.2s;
 }
 </style>
 </head>
@@ -68,7 +69,7 @@ function playOrPause() {
 		window.clearInterval(updateBar);
 	} else {
 		myMovie.play();
-		updateBar = setInterval(update, 500);
+		updateBar = setInterval(update, 100);
 	}
 }
 
