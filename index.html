@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<head>
+  <title>Timelapse</title>
+  <style>
+body {
+	text-align: center;
+}
+ 
+header,section,footer,aside,nav,article,hgroup {
+	display: block;
+}
+#skin {
+	width:1280px;
+	margin:10px auto;
+	padding:5px;
+}
+nav {
+	margin: 5px 0px;
+}
+#buttons {
+	float:left;
+	width:70px;
+	height:22px;
+}
+#defaultBar {
+	position:relative;
+	float:left;
+	width:1280px;
+	height:16px;
+	padding:0;
+	background: gray;
+}
+#progressBar {
+	position:absolute;
+	width:0px;
+	height:16px;
+	background:darkgray;
+}
+</style>
+</head>
+<body>
+<section id="skin">
+	<video id="myMovie" width="1280" height="720">
+		<source src="time-lapse.mp4"/>
+	</video>
+	<nav>
+		<div id="defaultBar">
+			<div id="progressBar"></div>
+		</div>
+		<div style="clear:both"></div>
+	</nav>
+</section>
+<script>
+
+function doFirst(){
+	barSize = 1279;
+	myMovie = document.getElementById('myMovie');
+	bar = document.getElementById('defaultBar');
+	progressBar = document.getElementById('progressBar');
+ 
+	myMovie.addEventListener('click', playOrPause, false);
+	bar.addEventListener('click', clickedBar, false);
+}
+
+function playOrPause() {
+	if (!myMovie.paused && !myMovie.ended) {
+		myMovie.pause();
+		window.clearInterval(updateBar);
+	} else {
+		myMovie.play();
+		updateBar = setInterval(update, 500);
+	}
+}
+
+function update() {
+	if (!myMovie.ended) {
+		var size = parseInt(myMovie.currentTime * barSize / myMovie.duration);
+		progressBar.style.width = size + 'px';
+	} else {
+		progressBar.style.width = '0px';
+		window.clearInterval(updateBar);
+	}
+}
+
+function clickedBar(e){
+//	if(!myMovie.paused && !myMovie.ended) {
+		var mouseX = e.pageX - bar.offsetLeft;
+		var newtime = mouseX * myMovie.duration / barSize;
+		myMovie.currentTime = newtime;
+		progressBar.style.width = mouseX + 'px';
+//	}
+}
+window.addEventListener('load', doFirst, false);
+    </script>
+</body>
